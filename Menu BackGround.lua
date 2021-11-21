@@ -20,8 +20,8 @@ local img_scale = Menu.SliderInt("Image", "Image Scale", 1000, 0, 3000)
 
 
 local ui_callback = function()
-  local new_state = text_enable:Get()
-  text:SetVisible(new_state)
+	local new_state = text_enable:Get()
+	text:SetVisible(new_state)
 	font_shadow:SetVisible(new_state)
 	font_scale:SetVisible(new_state)
 	textbox:SetVisible(new_state)
