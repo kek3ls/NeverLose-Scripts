@@ -38,7 +38,6 @@ local function draw_svaston(x, y, size)
 			Render.Line(Vector2.new(x + p_0, y - p_1), Vector2.new(x + p_2, y - p_3), switch:GetColor())
 		end
 	end
-
 	rotationdegree = rotationdegree + (frametime * 150)
 end
 
@@ -61,10 +60,10 @@ Cheat.RegisterCallback("draw", function()
 		if not sniper_crosshair:Get() and (weap == "CWeaponAWP" or weap == "CWeaponSSG08" or weap == "CWeaponSCAR20" or weap == "CWeaponG3SG1") then return end
 		draw_svaston(screen.x / 2, screen.y / 2, size:Get() * 100)
 	else
-    return
-  end
+		return
+	end
 end)
 
 Cheat.RegisterCallback("destroy", function()
-  crosshair:SetInt(1)
+	crosshair:SetInt(1)
 end)
