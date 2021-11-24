@@ -2,9 +2,9 @@ local mode = Menu.Combo("Reverse Knife Hand", "Knife Mode", {"Normal", "Reverse"
 local cl_righthand = CVar.FindVar("cl_righthand")
 
 Cheat.RegisterCallback("prediction", function(cmd)
-	local localplayer = EntityList.GetClientEntity(EngineClient.GetLocalPlayer())
+	local get_local_player = EntityList.GetLocalPlayer()
 	
-	if localplayer:GetProp("DT_BasePlayer", "m_iHealth") <= 0 then 
+	if get_local_player:GetProp("m_iHealth") <= 0 then 
 		if mode:Get() == 0 then
 			cl_righthand:SetInt(1)
 		else
@@ -13,10 +13,9 @@ Cheat.RegisterCallback("prediction", function(cmd)
 		return
 	end
 	
-	local get_local_player = EntityList.GetLocalPlayer()
+	if not get_local_player then return end
 	local get_entity_weapon = get_local_player:GetActiveWeapon()
 	local weap = get_entity_weapon:GetClassName()
-	local cl_righthand = CVar.FindVar("cl_righthand")
 	
 	if mode:Get() == 0 then
 		if weap == "CKnife" then
