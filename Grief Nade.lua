@@ -4,11 +4,10 @@ local ui = {
 	space = Menu.Text("Main", ""),
 	text3 = Menu.Text("Main", "-98 w/ out armor, -59 w/ armor"),
 	spacing = Menu.Text("Main", ""),
-	armor = Menu.Switch("Main", "Armor Check", true, "Do not throw when you an have armor."),
-	velocity = Menu.Switch("Main", "Velocity Check", true, "Do not throw when you moving."),
+	checks = Menu.MultiCombo("Main", "Checks", {"Armor", "Velocity"}, 2, "Do not throw when you 1: have an armor; moving.")
 }
 
-Cheat.RegisterCallback("prediction", function(cmd)
+Cheat.RegisterCallback("pre-prediction", function(cmd)
 	local get_local_player = EntityList.GetLocalPlayer()
 	if not get_local_player then return end
 	
@@ -21,17 +20,16 @@ Cheat.RegisterCallback("prediction", function(cmd)
 	local m_iHealth = get_local_player:GetProp("m_iHealth")
 	local view_angles = EngineClient.GetViewAngles()
 	local velocity = Vector.new(get_local_player:GetProp("DT_BasePlayer", "m_vecVelocity[0]"), 
-		get_local_player:GetProp("DT_BasePlayer", "m_vecVelocity[1]"), 
-		get_local_player:GetProp("DT_BasePlayer", "m_vecVelocity[2]")
-	):Length2D()
+	get_local_player:GetProp("DT_BasePlayer", "m_vecVelocity[1]"), 
+	get_local_player:GetProp("DT_BasePlayer", "m_vecVelocity[2]")):Length2D()
 
 	if weap ~= "CHEGrenade" then return end
-	if ui.armor:Get() then if m_ArmorValue ~= 0 then return end end
-	if ui.velocity:Get() then if velocity >= 2 then return end end
+	if ui.checks:GetBool(1) then if m_ArmorValue ~= 0 then return end end
+	if ui.checks:GetBool(2) then if velocity >= 2 then return end end
 	if m_flThrowStrength >= 0.11 or m_flThrowStrength <= 0.10 then return end
 	if view_angles.pitch > -88 then return end
 	if m_iHealth <= 0 then return end
 	
-	EngineClient.ExecuteClientCmd("-attack")
-	EngineClient.ExecuteClientCmd("-attack2")
+	cmd.buttons = bit.band(cmd.buttons, bit.bnot(2048))
+	cmd.buttons = bit.band(cmd.buttons, bit.bnot(1))
 end)
