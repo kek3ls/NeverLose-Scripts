@@ -1,22 +1,18 @@
-local phrase = Menu.TextBox('Main', 'Custom KillSay', 128, '1')
+--full version script: https://neverlose.cc/market/item?id=O8N0c8
+local ui = {
+	phrase = Menu.TextBox('Main', 'KillSay Phrase', 256, '1', 'Maximum characters: 256.'),
+}
 
 Cheat.RegisterCallback('events', function(event)
 	local me = EntityList.GetLocalPlayer()
-    
-	if not EngineClient.IsInGame() or not me or me:GetProp('m_iHealth') <= 0 then
-		return
-	end
-    
-	if event:GetName() ~= 'player_death' then
-		return
-	end
+	local ingame = EngineClient.IsConnected() and EngineClient.IsInGame()
+
+	if not ingame or not me or not me:IsAlive() or event:GetName() ~= 'player_death' then return end
 
 	local victim = EntityList.GetPlayerForUserID(event:GetInt('userid'))
 	local attacker = EntityList.GetPlayerForUserID(event:GetInt('attacker'))
 
-	if victim == attacker or attacker ~= me or victim:GetProp('m_iTeamNum') == me:GetProp('m_iTeamNum') then
-		return
-	end
+	if victim == attacker or attacker ~= me then return end
 
-	EngineClient.ExecuteClientCmd('say "' .. phrase:Get() .. '"')
+	EngineClient.ExecuteClientCmd('say "' .. ui.phrase:Get() .. '"')
 end)
